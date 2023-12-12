@@ -1,5 +1,8 @@
 pipeline {
-    agent none
+    agent any
+    environment {
+        DOCKER_HOST = 'tcp://localhost:2376' // Puede que necesites ajustar el puerto según tu configuración
+    }
     stages {
         stage('Build') {
             agent {
@@ -9,10 +12,6 @@ pipeline {
             }
             steps {
                 script {
-                    // Agrega este paso para instalar git dentro del contenedor
-                    sh 'docker exec -u root ad37048dea2d apk add --no-cache git'
-
-                    // Continúa con tus pasos de compilación
                     sh 'python -m py_compile sources/add2vals.py sources/calc.py'
                 }
             }
@@ -33,13 +32,11 @@ pipeline {
             }
         }
         stage('Deliver') {
-            agent {
-                docker {
-                    image 'cdrx/pyinstaller-linux:python2'
-                }
-            }
             steps {
-                sh 'pyinstaller --onefile sources/add2vals.py'
+                script {
+                    sh 'docker exec -u root ad37048dea2d apk add --no-cache git'
+                    sh 'pyinstaller --onefile sources/add2vals.py'
+                }
             }
             post {
                 success {
