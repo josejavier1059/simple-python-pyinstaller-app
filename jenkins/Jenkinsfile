@@ -21,7 +21,10 @@ pipeline {
                 }
             }
             steps {
-                sh 'py.test --verbose --junit-xml test-reports/results.xml sources/test_calc.py'
+                script {
+                    sh 'apk add --no-cache git'
+                    sh 'py.test --verbose --junit-xml test-reports/results.xml sources/test_calc.py'
+                }
             }
             post {
                 always {
@@ -36,16 +39,16 @@ pipeline {
                 }
             }
             steps {
-                sh 'pyinstaller --onefile sources/add2vals.py'
+                script {
+                    sh 'apk add --no-cache git'
+                    sh 'pyinstaller --onefile sources/add2vals.py'
+                }
             }
             post {
                 success {
                     archiveArtifacts 'dist/add2vals'
                 }
             }
-        }
-    }
-}
         }
     }
 }
