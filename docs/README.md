@@ -1,7 +1,7 @@
 # Entrega Practica 3
 Jose Javier García Torrejón
 
-Samuel
+Samuel Fernández Peinado
 
 ## Parte 1:
 
